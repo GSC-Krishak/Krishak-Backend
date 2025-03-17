@@ -1,13 +1,13 @@
 import express from 'express';
-import routes from "./routes/route.js";
+import router from "./routes/route.js";
 
 const app = express();
 const PORT = 3000;
 
-routes.use(express.json());
+app.use(express.json());
 
 //TODO: Add morgan middleware
-app.use('/',routes);
+app.use('/',router);
 
 
 app.listen(PORT, ()=>{

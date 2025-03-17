@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const prediction = async (req,res)=>{
     console.log(req.body);
     try {
