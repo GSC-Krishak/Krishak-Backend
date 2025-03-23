@@ -1,5 +1,5 @@
 const home = (req, res) => {
-    res.send("Hello world");
+    res.json("Hello world");
 };
 
 export default home;

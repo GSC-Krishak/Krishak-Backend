@@ -1,12 +1,13 @@
 import express from 'express';
 import router from "./routes/route.js";
+import morgan from 'morgan';
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+app.use(morgan('tiny'))
 
-//TODO: Add morgan middleware
 app.use('/',router);
 
 
