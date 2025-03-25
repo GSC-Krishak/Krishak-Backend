@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model recommendations{
+  id  String  @id @default(uuid())
+  userId String
+  crop1 String
+  crop2 String
+  crop3 String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

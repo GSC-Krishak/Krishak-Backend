@@ -17,7 +17,8 @@
     "@google-cloud/logging": "^11.2.0",
     "axios": "^1.8.3",
     "express": "^4.21.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "prisma": "^6.5.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

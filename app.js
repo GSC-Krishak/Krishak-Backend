@@ -13,5 +13,5 @@ app.use('/',router);
 
 app.listen(PORT, ()=>{
     //FIXME: add google logging
-    console.log(`Server has been started at http://localhost:${PORT}`)
+    console.log(`Server has been started at: ${PORT}`)
 })
