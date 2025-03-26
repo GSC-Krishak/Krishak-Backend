@@ -6,12 +6,53 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-model recommendations{
-  id  String  @id @default(uuid())
-  userId String
-  crop1 String
-  crop2 String
-  crop3 String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+model recommendations {
+  id              String            @id @default(uuid())
+  userId          String
+  requestId       String
+  cropRecommended recommendedCrop[] @relation("RecommendationToCrop")
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+model recommendedCrop {
+  id               String           @id @default(uuid())
+  commodity        String
+  profitability    Int
+  fertilizerCost   String
+  compatibility    String
+  nitrogen         String
+  phosphorus       String
+  potassium        String
+  magnessium       String
+  calcium          String
+  recommendation   recommendations? @relation("RecommendationToCrop", fields: [recommendationId], references: [id])
+  recommendationId String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+}
+
+model soilReport {
+  id            String         @id @default(uuid())
+  userId        String
+  n             Float
+  p             Float
+  k             Float
+  mg            Float
+  calcium       Float
+  ph            Float
+  generation    Boolean        @default(false)
+  previousCrops PreviousCrop[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model PreviousCrop {
+  id           String     @id @default(uuid())
+  name         String
+  soilReport   soilReport @relation(fields: [soilReportId], references: [id])
+  soilReportId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
