@@ -13,44 +13,44 @@ const prediction = async (req, res) => {
 
         // Save soil report to the database
         const requestData = req.body;
-        const soilReport = await prismaClient.soilReport.create({
-            data: {
-                userId: userId,
-                n: requestData.n,
-                p: requestData.p,
-                k: requestData.k,
-                mg: requestData.mg,
-                calcium: requestData.calcium,
-                ph: requestData.ph,
-                previousCrops: {
-                    create: requestData.previous_crops.map(crop => ({
-                        name: crop
-                    }))
-                }
-            }
-        });
+        // const soilReport = await prismaClient.soilReport.create({
+        //     data: {
+        //         userId: userId,
+        //         n: requestData.n,
+        //         p: requestData.p,
+        //         k: requestData.k,
+        //         mg: requestData.mg,
+        //         calcium: requestData.calcium,
+        //         ph: requestData.ph,
+        //         previousCrops: {
+        //             create: requestData.previous_crops.map(crop => ({
+        //                 name: crop
+        //             }))
+        //         }
+        //     }
+        // });
 
         // Save recommendation response to the database
         const responseData = response.data;
-        const recommendation = await prismaClient.recommendations.create({
-            data: {
-                userId: userId,
-                requestId: requestData.requestId || null,
-                cropRecommended: {
-                    create: responseData.Recommended_Crops.map(crop => ({
-                        commodity: crop.Commodity,
-                        profitability: crop.Profitability,
-                        fertilizerCost: crop.Fertilizer_Cost,
-                        compatibility: crop.Compatibility,
-                        nitrogen: crop.Fertilizer_Adjustments["Nitrogen (N)"],
-                        phosphorus: crop.Fertilizer_Adjustments["Phosphorus (P)"],
-                        potassium: crop.Fertilizer_Adjustments["Potassium (K)"],
-                        magnessium: crop.Fertilizer_Adjustments["Magnesium (Mg)"],
-                        calcium: crop.Fertilizer_Adjustments["Calcium (Ca)"]
-                    }))
-                }
-            }
-        });
+        // const recommendation = await prismaClient.recommendations.create({
+        //     data: {
+        //         userId: userId,
+        //         requestId: requestData.requestId || null,
+        //         cropRecommended: {
+        //             create: responseData.Recommended_Crops.map(crop => ({
+        //                 commodity: crop.Commodity,
+        //                 profitability: crop.Profitability,
+        //                 fertilizerCost: crop.Fertilizer_Cost,
+        //                 compatibility: crop.Compatibility,
+        //                 nitrogen: crop.Fertilizer_Adjustments["Nitrogen (N)"],
+        //                 phosphorus: crop.Fertilizer_Adjustments["Phosphorus (P)"],
+        //                 potassium: crop.Fertilizer_Adjustments["Potassium (K)"],
+        //                 magnessium: crop.Fertilizer_Adjustments["Magnesium (Mg)"],
+        //                 calcium: crop.Fertilizer_Adjustments["Calcium (Ca)"]
+        //             }))
+        //         }
+        //     }
+        // });
 
         res.json(response.data);
     } catch (error) {
