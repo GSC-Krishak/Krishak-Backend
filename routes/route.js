@@ -10,6 +10,6 @@ const router = express.Router();
 
 router.get('/', home);
 router.post("/predict", prediction);
-router.get('/getDataDashboard', getDataDashboard);
+router.post('/getDataDashboard', getDataDashboard);
 
 export default router;
