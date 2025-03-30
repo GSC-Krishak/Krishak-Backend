@@ -1,6 +1,7 @@
 import axios from "axios";
 import dotenv from "dotenv";
 import { prismaClient } from "../lib/db.js";
+import redisClient from "../lib/redisClient.js"; // Import redisClient
 
 dotenv.config();
 
@@ -27,6 +28,10 @@ const prediction = async (req, res) => {
                         response: responseData
                     }
                 });
+
+                // Remove existing cache for the user
+                const cacheKey = `userRequests:${userId}`;
+                await redisClient.del(cacheKey);
             } catch (dbError) {
                 console.error("Database error:", dbError.message);
                 return res.status(500).json({ error: "Failed to save recommendation to the database" });
