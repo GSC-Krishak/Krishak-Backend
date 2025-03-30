@@ -1,6 +1,7 @@
 import express from "express";
 import home from "../controllers/homeController.js";
 import prediction from "../controllers/predictController.js";
+import { getDataDashboard } from "../controllers/getDataDashboard.js";
 
 const router = express.Router();
 
@@ -9,5 +10,6 @@ const router = express.Router();
 
 router.get('/', home);
 router.post("/predict", prediction);
+router.get('/getDataDashboard', getDataDashboard);
 
 export default router;

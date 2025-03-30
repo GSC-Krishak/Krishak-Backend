@@ -11,9 +11,9 @@ model recommendations {
   id              String            @id @default(uuid())
   userId          String
   requestId       String
-  cropRecommended recommendedCrop[] @relation("RecommendationToCrop")
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
+  cropRecommended recommendedCrop[] @relation("RecommendationToCrop")
 }
 
 model recommendedCrop {
@@ -27,32 +27,41 @@ model recommendedCrop {
   potassium        String
   magnessium       String
   calcium          String
-  recommendation   recommendations? @relation("RecommendationToCrop", fields: [recommendationId], references: [id])
   recommendationId String?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
+  recommendation   recommendations? @relation("RecommendationToCrop", fields: [recommendationId], references: [id])
 }
 
 model soilReport {
   id            String         @id @default(uuid())
-  userId        String
   n             Float
   p             Float
   k             Float
   mg            Float
   calcium       Float
   ph            Float
-  generation    Boolean        @default(false)
-  previousCrops PreviousCrop[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+  generation    Boolean        @default(false)
+  userId        String
+  previousCrops PreviousCrop[]
 }
 
 model PreviousCrop {
   id           String     @id @default(uuid())
   name         String
-  soilReport   soilReport @relation(fields: [soilReportId], references: [id])
   soilReportId String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+  soilReport   soilReport @relation(fields: [soilReportId], references: [id])
+}
+
+model AIrecomendation {
+  id        String   @id @default(uuid())
+  request   Json
+  response  Json
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
