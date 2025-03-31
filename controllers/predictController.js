@@ -2,6 +2,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import { prismaClient } from "../lib/db.js";
 import redisClient from "../lib/redisClient.js"; 
+import { isValidStateAndDistrict } from "../utils/stateDistrictChecker.js";
 
 dotenv.config();
 
@@ -10,7 +11,16 @@ const prediction = async (req, res) => {
         const userId = req.body.userId;
         const apiUrl = process.env.PREDICTION_API_URL;
         const requestData = req.body;
+        const district = req.body.district;
+        const state = req.body.state;
 
+        // Validate state and district
+        if (!isValidStateAndDistrict(state, district)) {
+            console.warn("Invalid state or district");
+            res.status(400).json({ error: "Invalid state or district" });
+            return;
+        }
+        
         if (!apiUrl) {
             console.error("PREDICTION_API_URL is not defined in environment variables");
             res.status(500).json({ error: "PREDICTION_API_URL is not defined in environment variables" });
@@ -20,7 +30,7 @@ const prediction = async (req, res) => {
 
         if (userId) {
             try {
-                const response = await axios.post(`${apiUrl}/recommend`, req.body);
+                const response = await axios.post(`${apiUrl}/recommend`, requestData);
                 const responseData = response.data;
 
                 // Check if responseData is valid
