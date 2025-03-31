@@ -11,6 +11,7 @@ const prediction = async (req, res) => {
         const apiUrl = process.env.PREDICTION_API_URL;
 
         if (!apiUrl) {
+            console.error("PREDICTION_API_URL is not defined in environment variables");
             return res.status(500).json({ error: "PREDICTION_API_URL is not defined in environment variables" });
         }
 
@@ -37,6 +38,7 @@ const prediction = async (req, res) => {
                 return res.status(500).json({ error: "Failed to save recommendation to the database" });
             }
         } else {
+            console.warn("userId missing or invalid");
             return res.status(400).json({ error: "userId is missing or invalid" });
         }
 

@@ -6,6 +6,7 @@ export const getDataDashboard = async (req, res) => {
         const { userId } = req.body;
 
         if (!userId) {
+            console.warn("userId required");
             return res.status(400).json({ error: "userId is required" });
         }
 
