@@ -1,7 +1,7 @@
 import axios from "axios";
 import dotenv from "dotenv";
 import { prismaClient } from "../lib/db.js";
-import redisClient from "../lib/redisClient.js"; // Import redisClient
+import redisClient from "../lib/redisClient.js"; 
 
 dotenv.config();
 
@@ -9,19 +9,27 @@ const prediction = async (req, res) => {
     try {
         const userId = req.body.userId;
         const apiUrl = process.env.PREDICTION_API_URL;
+        const requestData = req.body;
 
         if (!apiUrl) {
             console.error("PREDICTION_API_URL is not defined in environment variables");
-            return res.status(500).json({ error: "PREDICTION_API_URL is not defined in environment variables" });
+            res.status(500).json({ error: "PREDICTION_API_URL is not defined in environment variables" });
+            return;
         }
-
-        const response = await axios.post(`${apiUrl}/recommend`, req.body);
-
-        const requestData = req.body;
-        const responseData = response.data;
+        
 
         if (userId) {
             try {
+                const response = await axios.post(`${apiUrl}/recommend`, req.body);
+                const responseData = response.data;
+
+                // Check if responseData is valid
+                if (!responseData) {
+                    console.error("No response data received from the prediction API");
+                    res.status(500).json({ error: "No response data received from the prediction API" });
+                    return;
+                }
+                
                 await prismaClient.AIrecomendation.create({
                     data: {
                         userId: userId,
@@ -29,20 +37,24 @@ const prediction = async (req, res) => {
                         response: responseData
                     }
                 });
-
+                
                 // Remove existing cache for the user
                 const cacheKey = `userRequests:${userId}`;
                 await redisClient.del(cacheKey);
+
+                res.json(responseData);
             } catch (dbError) {
                 console.error("Database error:", dbError.message);
-                return res.status(500).json({ error: "Failed to save recommendation to the database" });
+                res.status(500).json({ error: "Failed to save recommendation to the database" });
+                return;
             }
         } else {
             console.warn("userId missing or invalid");
-            return res.status(400).json({ error: "userId is missing or invalid" });
+            res.status(400).json({ error: "userId is missing or invalid" });
+            return;
         }
-
-        res.json(response.data);
+        // res.status(500).message("Something went wrong!")
+        
     } catch (error) {
         console.error("Error forwarding request:", error.message);
         res.status(error.response?.status || 500).json({ error: error.message });
