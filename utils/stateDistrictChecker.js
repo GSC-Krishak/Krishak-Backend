@@ -26,6 +26,6 @@ const readJSONFile = async (filePath) => {
 const districtsData = await readJSONFile(new URL("../assets/districts.json", import.meta.url));
 
 export const isValidStateAndDistrict = (state, district) => {
-    const stateData = districtsData.states.find(s => s.state === state);
-    return stateData && stateData.districts.includes(district);
+    const stateData = districtsData.states.find(s => s.state.toLowerCase() === state.toLowerCase());
+    return stateData && stateData.districts.map(d => d.toLowerCase()).includes(district.toLowerCase());
 };
